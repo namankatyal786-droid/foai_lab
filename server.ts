@@ -9,8 +9,9 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const app = express();
+
 async function startServer() {
-  const app = express();
   const PORT = 3000;
 
   app.use(express.json());
@@ -54,8 +55,6 @@ async function startServer() {
       }
 
       const data = await response.json();
-      // Assuming the response format follows OpenAI-like structure for b64_json
-      // or whatever nscale router returns.
       res.json(data);
     } catch (error) {
       console.error("Server Error:", error);
@@ -78,9 +77,14 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
+  // Only listen when not in Vercel environment
+  if (!process.env.VERCEL) {
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  }
 }
 
 startServer();
+
+export default app;
