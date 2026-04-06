@@ -53,6 +53,13 @@ export default function App() {
         }),
       });
 
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        console.error("Non-JSON response received:", text);
+        throw new Error(`Server returned an unexpected response (HTML). This usually means the API route is not found or the server crashed.`);
+      }
+
       const data: GenerationResponse = await response.json();
 
       if (!response.ok) {

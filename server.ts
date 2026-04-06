@@ -17,6 +17,7 @@ async function startServer() {
 
   // API route for image generation
   app.post("/api/generate", async (req, res) => {
+    console.log("Received generation request:", req.body.prompt ? "Prompt present" : "No prompt");
     try {
       const { prompt, token } = req.body;
       if (!prompt) {
@@ -25,9 +26,11 @@ async function startServer() {
 
       const hfToken = token || process.env.HF_TOKEN;
       if (!hfToken) {
+        console.warn("Missing HF token in request and environment");
         return res.status(400).json({ error: "Hugging Face token is missing. Please provide it in settings or configure HF_TOKEN environment variable." });
       }
 
+      console.log("Calling Hugging Face API...");
       const response = await fetch(
         "https://router.huggingface.co/nscale/v1/images/generations",
         {
