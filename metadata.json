@@ -1,0 +1,5 @@
+{
+  "name": "Hugging Face Image Gen",
+  "description": "A text-to-image generator powered by Hugging Face's Stable Diffusion model.",
+  "requestFramePermissions": []
+}
